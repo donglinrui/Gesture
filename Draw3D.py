@@ -23,11 +23,11 @@ def avg(x,num):
 		temp = format(temp/(num),'.2f')
 		rx.append(float(temp))
 	return rx
-def to_X(ax,t):#加速度数据转化为位移数据
+def to_X(ax,t):#transfor acceleration data to displacement data
 	dx = [0]
 	vx = [0]
 	for i in range(len(ax)):
-		dxx = float(dx[len(dx)-1]) + float(vx[len(vx)-1])*t + float(0.5 * ax[i] * t * t) #当前x轴位移dxx，改变前x轴位置dx[len(dx)-1]，初速度为vx[len(vx)-1]，此次位移改变为vt+ 1/2*a*t^2
+		dxx = float(dx[len(dx)-1]) + float(vx[len(vx)-1])*t + float(0.5 * ax[i] * t * t) #The current X-axis displacement DXX, before changing the x-axis position DXX [len (DX) - 1], the initial velocity is VX [len (VX) - 1], the displacement is changed to vt + 1 / 2 * a * T ^ 2
 		dxx = format(dxx, '.3f')
 		vx0 = vx[len(vx)-1] + ax[i] * t
 		vx0 = format(vx0, '.3f')
@@ -37,27 +37,27 @@ def to_X(ax,t):#加速度数据转化为位移数据
 			if (-r <ax[i-1]<r and -r<ax[i]<r and -r<ax[i+1]<r):
 				vx0 = 0
 		dx.append(float(dxx))
-		vx.append(float(vx0))#求出末速度，放入x轴速度list中
+		vx.append(float(vx0))#Calculate the final velocity and put it in the x-axis speed list
 	return dx
 def to_V(ax,t):
 	vx = [0]
 	for i in range(len(ax)):
-		#dxx = float(dx[len(dx)-1]) + float(vx[len(vx)-1])*t + float(0.5 * ax[i] * t * t) #当前x轴位移dxx，改变前x轴位置dx[len(dx)-1]，初速度为vx[len(vx)-1]，此次位移改变为vt+ 1/2*a*t^2
+		#dxx = float(dx[len(dx)-1]) + float(vx[len(vx)-1])*t + float(0.5 * ax[i] * t * t) #The current X-axis displacement DXX, before changing the x-axis position DXX [len (DX) - 1], the initial velocity is VX [len (VX) - 1], the displacement is changed to vt + 1 / 2 * a * T ^ 2
 		#dxx = format(dxx, '.3f')
 		vx0 = vx[len(vx)-1] + ax[i] * t
 		vx0 = format(vx0, '.3f')
-		#降低速度干扰
+		#Reduce speed interference
 		r = 0.4
 		if i-1 >= 0 and i+1 < len(ax):
 			if (-r <ax[i-1]<r and -r<ax[i]<r and -r<ax[i+1]<r):
 				vx0 = 0
 		#dx.append(float(dxx))
-		vx.append(float(vx0))#求出末速度，放入x轴速度list中
+		vx.append(float(vx0))#Calculate the final velocity and put it in the x-axis speed list
 	return vx
 def filter_a(ax):
 	result1 = [] 
 	result2 = []
-	#计算出平均值（过滤掉小于f1的加速度）
+	#Calculate the average value (filter out acceleration less than F1)
 	f1 = 0.2
 	for axx in ax:
 		if (axx>f1 or axx<-f1) :
@@ -69,8 +69,8 @@ def filter_a(ax):
 		avg = abs(avg/len(result1))
 	else:
 		avg = 1
-	#avg是过滤的阈值，小于这个阈值的加速度一律被定为0，防止小的加速度偏移
-	ff2 = 0.1#过滤掉小于ff2*avg的所有加速度数值
+	#AVG is the filtering threshold, and the acceleration less than this threshold is set as 0 to prevent small acceleration offset
+	ff2 = 0.1#Filter out all acceleration values less than FF2 * AVG
 	#print("avg",avg*ff2)
 	for axx in ax :
 		f2 = abs(avg*ff2)
@@ -79,18 +79,18 @@ def filter_a(ax):
 		result2.append(axx)
 	#print("result2",result2)
 	return result2
-def set_data():#读取加速度数据
-	t = 0.1 #采集延时
+def set_data():#read the accelration data
+	t = 0.1 #Acquisition delay
 	ax,ay,az = Read_log.read()
-	#低通滤波器
+	#low pass filter
 	ax = filter_a(ax)
 	ay = filter_a(ay)
 	az = filter_a(az)
-	#卡尔曼滤波器
+	#Kalman fliter
 	ax = kalman.K(ax)
 	ay = kalman.K(ay)
 	az = kalman.K(az)
-	#每n个数据求一个平均值
+	#Average every n data
 	n = 10
 	ax = avg(ax,n)
 	ay = avg(ay,n)
@@ -132,12 +132,12 @@ def set_data():#读取加速度数据
 		vz.append(float(vz0))#求出末速度，放入z轴速度list中
 '''
 def get_V():
-	t = 0.1 #采集延时
+	t = 0.1 #delay
 	ax,ay,az = Read_log.read()
 	ax = filter_a(ax)
 	ay = filter_a(ay)
 	az = filter_a(az)
-	#每n个数据求一个平均值
+	#calculate the average
 	n = 10
 	ax = avg(ax,n)
 	ay = avg(ay,n)
@@ -149,16 +149,16 @@ def get_V():
 	dy = to_V(ay,t)
 	dz = to_V(az,t)
 	return dx,dy,dz
-def gesture_re1(change_x,change_y,change_z):#模型一判断
+def gesture_re1(change_x,change_y,change_z):#Model 1
 	type = 0
-	if change_x<(0.1*change_z) and change_y<(0.1*change_z):#仅在z轴上有运动
+	if change_x<(0.1*change_z) and change_y<(0.1*change_z):#move on x
 		type = "z"
-	elif change_x<(0.1*change_y) and change_z<(0.1*change_y):#仅在y轴上有运动
+	elif change_x<(0.1*change_y) and change_z<(0.1*change_y):#move on y
 		type = "y"
-	elif change_y<(0.1*change_x) and change_z<(0.1*change_x):#仅在z轴上有运动
+	elif change_y<(0.1*change_x) and change_z<(0.1*change_x):#move on z
 		type = "x"
 	return type
-def gesture_re2(change_x,change_y,change_z):
+def gesture_re2(change_x,change_y,change_z):#Model 2
 	vx,vy,vz = get_V()
 	#print(vx)
 	#print(vy)
@@ -166,63 +166,63 @@ def gesture_re2(change_x,change_y,change_z):
 	x_nzero = find_nzero(vx)
 	y_nzero = find_nzero(vy)
 	z_nzero = find_nzero(vz)
-	if (min(change_x,change_y,change_z) == change_y):#在xz平面上
+	if (min(change_x,change_y,change_z) == change_y):#move on plane xz
 		#print("xz")
-		if x_nzero < z_nzero:#判断先向哪一个轴运动
-			if (vx[x_nzero] < 0) :#判断运动方向
+		if x_nzero < z_nzero:
+			if (vx[x_nzero] < 0) :
 				print("先沿着x轴负方向运动")
 			else:
 				print("先沿着x轴正方向运动")
-			if (vz[z_nzero] < 0) :#判断运动方向
+			if (vz[z_nzero] < 0) :
 				print("然后沿着z轴负方向运动")
 			else:
 				print("然后沿着z轴正方向运动")
 		else:
-			if (vz[z_nzero] < 0) :#判断运动方向
+			if (vz[z_nzero] < 0) :
 				print("先沿着z轴负方向运动")
 			else:
 				print("先沿着z轴正方向运动")
-			if (vx[x_nzero] < 0) :#判断运动方向
+			if (vx[x_nzero] < 0) :
 				print("然后沿着x轴负方向运动")
 			else:
 				print("然后沿着x轴正方向运动")
-	if (min(change_x,change_y,change_z) == change_z):#在xy平面上
+	if (min(change_x,change_y,change_z) == change_z):#move on plane xy
 		#print("xy")
-		if x_nzero < y_nzero:#判断先向哪一个轴运动
-			if (vx[x_nzero] < 0) :#判断运动方向
+		if x_nzero < y_nzero:
+			if (vx[x_nzero] < 0) :
 				print("先沿着x轴负方向运动")
 			else:
 				print("先沿着x轴正方向运动")
-			if (vy[y_nzero] < 0) :#判断运动方向
+			if (vy[y_nzero] < 0) :
 				print("然后沿着y轴负方向运动")
 			else:
 				print("然后沿着y轴正方向运动")
 		else:
-			if (vy[y_nzero] < 0) :#判断运动方向
+			if (vy[y_nzero] < 0) :
 				print("先沿着y轴负方向运动")
 			else:
 				print("先沿着y轴正方向运动")
-			if (vx[x_nzero] < 0) :#判断运动方向
+			if (vx[x_nzero] < 0) :
 				print("然后沿着x轴负方向运动")
 			else:
 				print("然后沿着x轴正方向运动")
-	if (min(change_x,change_y,change_z) == change_x):#在yz平面上
+	if (min(change_x,change_y,change_z) == change_x):#move on plane yz
 		#print("yz")
-		if z_nzero < y_nzero:#判断先向哪一个轴运动
-			if (vz[z_nzero] < 0) :#判断运动方向
+		if z_nzero < y_nzero:
+			if (vz[z_nzero] < 0) :
 				print("先沿着z轴负方向运动")
 			else:
 				print("先沿着z轴正方向运动")
-			if (vy[y_nzero] < 0) :#判断运动方向
+			if (vy[y_nzero] < 0) :
 				print("然后沿着y轴负方向运动")
 			else:
 				print("然后沿着y轴正方向运动")
 		else:
-			if (vy[y_nzero] < 0) :#判断运动方向
+			if (vy[y_nzero] < 0) :
 				print("先沿着y轴负方向运动")
 			else:
 				print("先沿着y轴正方向运动")
-			if (vz[z_nzero] < 0) :#判断运动方向
+			if (vz[z_nzero] < 0) :
 				print("然后沿着z轴负方向运动")
 			else:
 				print("然后沿着z轴正方向运动")
@@ -236,7 +236,7 @@ def change_direction_count(vv):#速度方向改变次数
 		if v[i]*v[i+1] < 0:
 			count += 1
 	return count
-def gesture_re3(change_x,change_y,change_z): #模型三，握手、挥手
+def gesture_re3(change_x,change_y,change_z): #Model 3
 	type = 0
 	rate = 0.3
 	if change_x<(rate*change_z) and change_y<(rate*change_z):#仅在z轴上有运动
