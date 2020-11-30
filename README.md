@@ -14,21 +14,21 @@ The Raspberry Pi is a series of small single-board computers developed in the Un
 
 This system use ADXL345 to collect acceleration Data and transfer to Raspberry Pi. On raspberry, the acceleration will be processed and the result of gesture type can be work out. 
 
-![image-20201130100328520](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100328520.png)
+![image-20201130100328520](E:\Code_on_github\Gesture\image-folder\image-20201130100328520.png)
 
 ### **How to draw gesture line**
 
-![image-20201130100431310](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100431310.png)
+![image-20201130100431310](E:\Code_on_github\Gesture\image-folder\image-20201130100431310.png)
 
-![image-20201130100442032](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100442032.png)
+![image-20201130100442032](E:\Code_on_github\Gesture\image-folder\image-20201130100442032.png)
 
 To draw gesture line, I integrate(積分) the accelerate data on 3 axis to get displacement data and velocity data. Since the interval of acceleration data is 0.02s, the gesture line can be drawn. 
 
 ### **Noise filter**
 
-![image-20201130100537068](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100537068.png)
+![image-20201130100537068](E:\Code_on_github\Gesture\image-folder\image-20201130100537068.png)
 
-![image-20201130100543692](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100543692.png)
+![image-20201130100543692](E:\Code_on_github\Gesture\image-folder\image-20201130100543692.png)
 
 To reduce the noise in the gesture recognition system, this system uses several kinds of filter methods.
 
@@ -40,31 +40,31 @@ These two pictures show the result of these methods. Obviously, after filtering 
 
 #### Model 1
 
-![image-20201130100700903](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100700903.png)
+![image-20201130100700903](E:\Code_on_github\Gesture\image-folder\image-20201130100700903.png)
 
 #### Model 2
 
-![image-20201130100723633](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100723633.png)
+![image-20201130100723633](E:\Code_on_github\Gesture\image-folder\image-20201130100723633.png)
 
 #### Model 3
 
-![image-20201130100744741](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100744741.png)
+![image-20201130100744741](E:\Code_on_github\Gesture\image-folder\image-20201130100744741.png)
 
 #### Model 4
 
-![image-20201130100808016](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100808016.png)
+![image-20201130100808016](E:\Code_on_github\Gesture\image-folder\image-20201130100808016.png)
 
 ### **8 test gesture**
 
-![image-20201130100854189](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100854189.png)
+![image-20201130100854189](E:\Code_on_github\Gesture\image-folder\image-20201130100854189.png)
 
-![image-20201130100902604](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100902604.png)
+![image-20201130100902604](E:\Code_on_github\Gesture\image-folder\image-20201130100902604.png)
 
 ### **Test result**
 
-![image-20201130100931332](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100931332.png)
+![image-20201130100931332](E:\Code_on_github\Gesture\image-folder\image-20201130100931332.png)
 
-![image-20201130100940049](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20201130100940049.png)
+![image-20201130100940049](E:\Code_on_github\Gesture\image-folder\image-20201130100940049.png)
 
 （1）The tester after training is more adapt for this system. And this kind of tester will improve the accuracy of this system.(Training means that the tester have used this gesture recognition system for several times before)
 
